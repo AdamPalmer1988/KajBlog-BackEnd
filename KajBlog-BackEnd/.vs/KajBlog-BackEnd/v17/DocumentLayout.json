@@ -1,12 +1,37 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\LearnToCode\\FinalProject\\KajBlog-BackEnd\\KajBlog-BackEnd\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{B649ED25-D72E-438F-86B1-51E4DC57D69B}|KajBlog-BackEnd\\KajBlog-BackEnd.csproj|c:\\learntocode\\finalproject\\kajblog-backend\\kajblog-backend\\kajblog-backend\\models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B649ED25-D72E-438F-86B1-51E4DC57D69B}|KajBlog-BackEnd\\KajBlog-BackEnd.csproj|solutionrelative:kajblog-backend\\models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
       "VerticalTabListWidth": 256,
-      "DocumentGroups": []
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "User.cs",
+              "DocumentMoniker": "C:\\LearnToCode\\FinalProject\\KajBlog-BackEnd\\KajBlog-BackEnd\\KajBlog-BackEnd\\Models\\User.cs",
+              "RelativeDocumentMoniker": "KajBlog-BackEnd\\Models\\User.cs",
+              "ToolTip": "C:\\LearnToCode\\FinalProject\\KajBlog-BackEnd\\KajBlog-BackEnd\\KajBlog-BackEnd\\Models\\User.cs",
+              "RelativeToolTip": "KajBlog-BackEnd\\Models\\User.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAwAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-10-01T01:13:24.969Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
     }
   ]
 }
