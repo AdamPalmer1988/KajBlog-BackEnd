@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\LearnToCode\\FinalProject\\KajBlog-BackEnd\\KajBlog-BackEnd\\KajBlog-BackEnd\\KajBlog-BackEnd.csproj": {}
+    "C:\\LearnToCode\\Projects\\KajBlog-BackEnd\\KajBlog-BackEnd\\KajBlog-BackEnd\\KajBlog-BackEnd.csproj": {}
   },
   "projects": {
-    "C:\\LearnToCode\\FinalProject\\KajBlog-BackEnd\\KajBlog-BackEnd\\KajBlog-BackEnd\\KajBlog-BackEnd.csproj": {
+    "C:\\LearnToCode\\Projects\\KajBlog-BackEnd\\KajBlog-BackEnd\\KajBlog-BackEnd\\KajBlog-BackEnd.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\LearnToCode\\FinalProject\\KajBlog-BackEnd\\KajBlog-BackEnd\\KajBlog-BackEnd\\KajBlog-BackEnd.csproj",
+        "projectUniqueName": "C:\\LearnToCode\\Projects\\KajBlog-BackEnd\\KajBlog-BackEnd\\KajBlog-BackEnd\\KajBlog-BackEnd.csproj",
         "projectName": "KajBlog-BackEnd",
-        "projectPath": "C:\\LearnToCode\\FinalProject\\KajBlog-BackEnd\\KajBlog-BackEnd\\KajBlog-BackEnd\\KajBlog-BackEnd.csproj",
-        "packagesPath": "C:\\Users\\Blitz\\.nuget\\packages\\",
-        "outputPath": "C:\\LearnToCode\\FinalProject\\KajBlog-BackEnd\\KajBlog-BackEnd\\KajBlog-BackEnd\\obj\\",
+        "projectPath": "C:\\LearnToCode\\Projects\\KajBlog-BackEnd\\KajBlog-BackEnd\\KajBlog-BackEnd\\KajBlog-BackEnd.csproj",
+        "packagesPath": "C:\\Users\\jasmi\\.nuget\\packages\\",
+        "outputPath": "C:\\LearnToCode\\Projects\\KajBlog-BackEnd\\KajBlog-BackEnd\\KajBlog-BackEnd\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Blitz\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\jasmi\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -22,6 +22,7 @@
         ],
         "sources": {
           "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -69,7 +70,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.200/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.300/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
