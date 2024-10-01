@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("KajBlog-BackEnd")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+57b7160f8abd6a3a1e660629f98f550238b855b0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3668e7c5d1d2ef06dabbeab857d8c30246e7fefa")]
 [assembly: System.Reflection.AssemblyProductAttribute("KajBlog-BackEnd")]
 [assembly: System.Reflection.AssemblyTitleAttribute("KajBlog-BackEnd")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
