@@ -8,7 +8,7 @@ public class KajBlogDbContext : DbContext
 {
     public KajBlogDbContext(DbContextOptions<KajBlogDbContext> options) : base(options) { }
 
-    public virtual DbSet<Blog> Events { get; set; }
+    public virtual DbSet<Blog> Blogs { get; set; }
     public virtual DbSet<Favorite> Favorites { get; set; }
     public virtual DbSet<User> Users { get; set; }
 }
