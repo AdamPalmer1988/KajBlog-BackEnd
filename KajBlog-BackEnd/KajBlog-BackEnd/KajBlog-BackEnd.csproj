@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>KajBlog_BackEnd</RootNamespace>
+    <UserSecretsId>57ca0bce-86ee-46ca-a15c-62dd2b0f93c7</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
