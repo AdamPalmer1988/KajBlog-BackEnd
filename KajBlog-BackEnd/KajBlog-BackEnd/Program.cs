@@ -41,6 +41,7 @@ builder.Services.AddAuthentication(options =>
 //would be blocked. Check the static Swagger Extension class for more details
 builder.Services.AddCustomSwagger();
 
+builder.Services.AddAutoMapper(typeof(Program));
 
 var app = builder.Build();
 
