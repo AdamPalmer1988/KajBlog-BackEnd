@@ -10,5 +10,5 @@ public class KajBlogDbContext : DbContext
 
     public virtual DbSet<Blog> Blogs { get; set; }
     public virtual DbSet<Favorite> Favorites { get; set; }
-    public virtual DbSet<User> Users { get; set; }
+
 }
