@@ -2,7 +2,7 @@
 
 namespace KajBlog_BackEnd.Models;
 
-public class Favorite
+public class Favorite : BaseModel
 {
     [Key]
     public int Id { get; set; }

@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 namespace KajBlog_BackEnd.Models
 {
-    public class Blog
+    public class Blog : BaseModel
     {
         [Key]
         public int BlogId { get; set; }
