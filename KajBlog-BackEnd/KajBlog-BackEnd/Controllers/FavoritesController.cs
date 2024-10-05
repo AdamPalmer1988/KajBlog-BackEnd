@@ -20,22 +20,26 @@ public class FavoritesController : ControllerBase
         _kajblogDbContext = kajblogDbContext;
     }
 
-    //[HttpGet({"usrId"})]
-    //public async Task<IActionResult> GetFavoritesByUserId(int userId)
-    //{
-    //IQueryable<Favorite> userFavorites = _kajblogDbContext.Favorites.Where(x => x.UserId == userId);
+    [HttpGet("{userId}")] // Get: api/Favorites/User/5
+    public async Task<IActionResult> GetFavoritesByUserId(int userId)
+    {
+        IQueryable<Favorite> userFavorites = _kajblogDbContext.Favorites.Where(x => x.UserId == userId);
 
-    //var result = from Favorite userFavorite in userFavorites
-    // join
+        var result = from favorites in userFavorites
+                     join blog_ in _kajblogDbContext.Blogs on favorites.BlogId equals blog_.BlogId into FavoritedBlogs
+                     from m in FavoritedBlogs.DefaultIfEmpty()
+                     select new
+                     {
+                         BlogId = favorites.BlogId,
+                         Catagory = m.Category,
+                         SubjectLine = m.SubjectLine,
+                         BlogBody = m.BlogBody,
+                         TimeStamp = m.TimeStamp,
+                         GiphyPull = m.GiphyPull
+                     };
 
-    // from
-
-    //select new
-    //{
-
-    //};
-    //return Ok(await result.ToListAsync());
-    //  }
+        return Ok(await result.ToListAsync());
+    }
 
 
     [HttpGet]// Get: api/Favorites
@@ -44,42 +48,21 @@ public class FavoritesController : ControllerBase
         return await _kajblogDbContext.Favorites.ToListAsync();
     }
 
-    [HttpGet("User/{userId}")] // Get: api/Favorites/User/5
-    public async Task<ActionResult<IEnumerable<Favorite>>> GetFavoritesByUserId(int ueserId)
+
+    [HttpPost]
+    public async Task<IActionResult> CreateFavorite([FromBody] Favorite favorite)
     {
-        var favorites = await _kajblogDbContext.Favorites
-            .Where(f => f.UserId == ueserId)
-            .ToListAsync();
+        Favorite newFavorite = new Favorite();
 
-        if (favorites == null || favorites.Count == 0)
-        {
-            return NotFound();
-        }
+        newFavorite.Id = favorite.Id;
+        newFavorite.UserId = favorite.UserId;
+        newFavorite.BlogId = favorite.BlogId;
 
-        return favorites;
-    }
+        _kajblogDbContext.Add(newFavorite);
 
-    [HttpGet("{id}")] // Get: api/Favorites/5
-    public async Task<ActionResult<Favorite>> GetFavorite(int id)
-    {
-        var favorite = await _kajblogDbContext.Favorites.FindAsync(id);
-
-        if (favorite == null)
-        {
-            return NotFound();
-        }
-
-        return favorite;
-    }
-
-
-    [HttpPost] // POST: api/Favorite
-    public async Task<ActionResult<Favorite>> PostFavorite(Favorite favorite)
-    {
-        _kajblogDbContext.Favorites.Add(favorite);
         await _kajblogDbContext.SaveChangesAsync();
 
-        return CreatedAtAction(nameof(GetFavorite), new { id = favorite.Id }, favorite);
+        return Ok(newFavorite);
     }
 
 
@@ -150,36 +133,3 @@ public class FavoritesController : ControllerBase
         return _kajblogDbContext.Favorites.Any(e => e.Id == id);
     }
 }
-
-
-//[HttpPost]
-//public async Task<IActionResult> CreateFavorite([FromBody] Favorite favorite)
-//{
-//    Favorite newFavorite = new Favorite();
-
-//  newFavorite.UserId = favorite.UserId;
-// newFavorite.BlogId = favorite.BlogId;
-
-//  _kajblogDbContext.SaveChangesAsync();
-
-// return Ok(newFavorite);
-//}
-
-//[HttpDelete("userId={userId}/blogId={blogId}")]
-//public async Task<IActionResult> DeleteFavorite(int userId, int blogId)
-//{
-//   var favoriteEntity = await _kajblogDbContext.Favorites.FirstOrDefaultAsync(x => x.UserId == userId && x.BlogId == blogId);
-
-//   if (favoriteEntity == null)
-//   {
-//     return NotFound();
-//}
-
-// _kajblogDbContext.Favorites.Remove(favoriteEntity);
-//await _kajblogDbContext.SaveChangesAsync();
-
-//return NoContent();
-//}
-
-
-
