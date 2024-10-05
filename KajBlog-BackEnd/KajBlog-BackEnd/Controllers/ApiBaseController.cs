@@ -4,6 +4,7 @@ using System.Security.Claims;
 
 namespace KajBlog_BackEnd.Controllers;
 
+
 [Route("api/[controller]")]
 [ApiController]
 public class ApiBaseController : ControllerBase
