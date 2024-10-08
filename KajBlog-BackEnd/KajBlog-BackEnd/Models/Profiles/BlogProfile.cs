@@ -9,5 +9,7 @@ public class BlogProfile : Profile
     {
         CreateMap<BlogDto, Blog>();
         CreateMap<UpdateBlogDto, Blog>();
+        CreateMap<CreateBlogDto, Blog>();
+        CreateMap<Blog, BlogDto>();
     }
 }

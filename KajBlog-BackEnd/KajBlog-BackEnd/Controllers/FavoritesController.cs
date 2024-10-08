@@ -34,7 +34,6 @@ public class FavoritesController : ControllerBase
                          Catagory = m.Category,
                          SubjectLine = m.SubjectLine,
                          BlogBody = m.BlogBody,
-                         TimeStamp = m.TimeStamp,
                          GiphyPull = m.GiphyPull
                      };
 
