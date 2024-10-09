@@ -7,6 +7,8 @@ using KajBlog_BackEnd.Models;
 using AutoMapper;
 using KajBlog_BackEnd.Models.DTO;
 using Microsoft.AspNetCore.Authorization;
+using KajBlog_BackEnd.Models.Profiles;
+
 
 namespace KajBlog_BackEnd.Controllers
 {
@@ -39,10 +41,10 @@ namespace KajBlog_BackEnd.Controllers
             if (blog == null)
             {
 
-                return NotFound(); 
+                return NotFound();
             }
 
-            return Ok(_mapper.Map<BlogDto>(blog)); 
+            return Ok(_mapper.Map<BlogDto>(blog));
         }
 
         [HttpPost]
@@ -79,7 +81,36 @@ namespace KajBlog_BackEnd.Controllers
             await _kajblogDbContext.SaveChangesAsync();
             return NoContent();
         }
+        [HttpPut("{id}")]
+        [Authorize]
+        public async Task<IActionResult> UpdateBlog(int id, [FromBody] UpdateBlogDto blogDto)
+        {
+            
+            if (blogDto == null)
+            {
+                return BadRequest("Blog data is required.");
+            }
+
+            
+            var existingBlog = await _kajblogDbContext.Blogs.FindAsync(id);
+            if (existingBlog == null)
+            {
+                return NotFound();
+            }
+
+      
+            _mapper.Map(blogDto, existingBlog);
+            
+           
+            existingBlog.UpdatedBy = GetCurrentUserID(); 
+
+            existingBlog.UpdatedOn = DateTime.UtcNow;
+            
+            await _kajblogDbContext.SaveChangesAsync();
+
+            
+            return NoContent();
+        }
+
     }
 }
-
-//Need a Put at some point
