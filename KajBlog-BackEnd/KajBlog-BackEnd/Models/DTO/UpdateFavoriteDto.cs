@@ -1,6 +1,6 @@
 ﻿namespace KajBlog_BackEnd.Models.DTO;
 
-public class UpdateFavoriteDtoClass
+public class UpdateFavoriteDto
 {
     public int Id { get; set; }
 
