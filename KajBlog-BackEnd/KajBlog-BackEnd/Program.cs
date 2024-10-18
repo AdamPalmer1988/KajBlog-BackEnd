@@ -1,7 +1,9 @@
 using KajBlog_BackEnd;
 using KajBlog_BackEnd.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,7 +21,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowAll",
         builder =>
         {
-            builder.AllowAnyOrigin()
+            builder.WithOrigins("http://localhost:4000", "https://kajblogfrontend.z13.web.core.windows.net/") 
                    .AllowAnyMethod()
                    .AllowAnyHeader();
         });
@@ -46,6 +48,11 @@ builder.Services.AddCustomSwagger();
 builder.Services.AddAutoMapper(typeof(Program));
 
 var app = builder.Build();
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<KajBlogDbContext>();
+    dbContext.Database.Migrate();  // Applies any pending migrations to the database
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -61,6 +68,12 @@ app.UseHttpsRedirection();
 //make sure use authentication and use authorization are in this EXACT order
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseExceptionHandler(errorApp => { errorApp.Run(async context => 
+{ var exceptionHandlerPathFeature = context.Features.Get<IExceptionHandlerPathFeature>(); 
+    var exception = exceptionHandlerPathFeature?.Error; if (exception != null) 
+    { var logger = context.RequestServices.GetRequiredService<ILogger<Program>>(); 
+        logger.LogError(exception, "Unhandled exception occurred."); } context.Response.StatusCode = 500; 
+    await context.Response.WriteAsync("An unexpected error occurred. Please try again later."); }); });
 
 app.MapControllers();
 
