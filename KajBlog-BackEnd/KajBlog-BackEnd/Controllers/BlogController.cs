@@ -48,7 +48,7 @@ namespace KajBlog_BackEnd.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        //[Authorize]
         public async Task<ActionResult<Blog>> CreateBlog([FromBody] CreateBlogDto blogDto)
         {
             if (blogDto == null)
@@ -68,7 +68,7 @@ namespace KajBlog_BackEnd.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> DeleteBlogById(int id)
         {
             var blog = await _kajblogDbContext.Blogs.FindAsync(id);
@@ -82,7 +82,7 @@ namespace KajBlog_BackEnd.Controllers
             return NoContent();
         }
         [HttpPut("{id}")]
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> UpdateBlog(int id, [FromBody] UpdateBlogDto blogDto)
         {
             
