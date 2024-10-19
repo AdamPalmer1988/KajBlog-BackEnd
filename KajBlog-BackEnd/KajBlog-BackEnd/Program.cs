@@ -21,7 +21,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowAll",
         builder =>
         {
-            builder.WithOrigins("http://localhost:4000", "https://kajblogfrontend.z13.web.core.windows.net/") 
+            builder.WithOrigins("http://localhost:4200", "https://kajblogfrontend.z13.web.core.windows.net") 
                    .AllowAnyMethod()
                    .AllowAnyHeader();
         });
