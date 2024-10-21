@@ -1,96 +1,107 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using KajBlog_BackEnd.Data;
-
 using KajBlog_BackEnd.Models;
-using System.Security.Cryptography.Xml;
-using Microsoft.AspNetCore.Http.HttpResults;
 using KajBlog_BackEnd.Models.DTO;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace KajBlog_BackEnd.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class FavoritesController : ApiBaseController
 {
-    private KajBlogDbContext _kajblogDbContext;
+    private readonly KajBlogDbContext _kajblogDbContext;
+
     public FavoritesController(KajBlogDbContext kajblogDbContext)
     {
         _kajblogDbContext = kajblogDbContext;
     }
-    [HttpGet("{userId}")]
-    public async Task<ActionResult<IEnumerable<Favorite>>> GetFavorites(int userId)
+
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<BlogDto>>> GetFavorites()
     {
+        var userId = GetCurrentUserID();
+        if (string.IsNullOrEmpty(userId))
+        {
+            return Unauthorized();
+        }
+
         var favorites = await _kajblogDbContext.Favorites
             .Where(f => f.UserId == userId)
+            .Include(f => f.Blog)
+            .Select(f => new BlogDto
+            {
+                BlogId = f.BlogId,
+                UserId = f.Blog.UserId,
+                Category = f.Blog.Category,
+                SubjectLine = f.Blog.SubjectLine,
+                BlogBody = f.Blog.BlogBody,
+                GiphyPull = f.Blog.GiphyPull,
+                CreatedOn = f.Blog.CreatedOn
+            })
             .ToListAsync();
+
         return Ok(favorites);
     }
 
-    [HttpPost]
-    public async Task<ActionResult<Favorite>> AddFavorite(Favorite favorite)
+    [HttpPost("blog/{blogId}")]
+    public async Task<ActionResult<Favorite>> AddFavorite(int blogId)
     {
+        var userId = GetCurrentUserID();
+        if (string.IsNullOrEmpty(userId))
+        {
+            return Unauthorized();
+        }
+
+        var blog = await _kajblogDbContext.Blogs.FindAsync(blogId);
+        if (blog == null)
+        {
+            return NotFound($"Blog with ID {blogId} does not exist.");
+        }
+
+        var existingFavorite = await _kajblogDbContext.Favorites
+            .FirstOrDefaultAsync(f => f.UserId == userId && f.BlogId == blogId);
+
+        if (existingFavorite != null)
+        {
+            return Conflict("This blog is already favorited.");
+        }
+
+        var favorite = new Favorite
+        {
+            BlogId = blogId,
+            UserId = userId,
+            CreatedOn = DateTime.UtcNow,
+            CreatedBy = userId
+        };
+
         _kajblogDbContext.Favorites.Add(favorite);
         await _kajblogDbContext.SaveChangesAsync();
-        return CreatedAtAction(nameof(GetFavorites), new { userId = favorite.UserId }, favorite);
+
+        return Ok();
     }
+
     [HttpDelete("{id}")]
     public async Task<IActionResult> RemoveFavorite(int id)
     {
+        var userId = GetCurrentUserID();
+        if (string.IsNullOrEmpty(userId))
+        {
+            return Unauthorized();
+        }
+
         var favorite = await _kajblogDbContext.Favorites.FindAsync(id);
-        if (favorite == null)
+        if (favorite == null || favorite.UserId != userId)
         {
             return NotFound();
         }
 
         _kajblogDbContext.Favorites.Remove(favorite);
         await _kajblogDbContext.SaveChangesAsync();
-        return NoContent();
-    }
-    private bool FavoriteExists(int id)
-    {
-        return _kajblogDbContext.Favorites.Any(e => e.Id == id);
-    }
-
-    [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateFavorite(int id, Favorite favorite)
-    {
-        
-        if (id != favorite.Id)
-        {
-            return BadRequest("Favorite ID mismatch.");
-        }
-
-       
-        var existingFavorite = await _kajblogDbContext.Favorites.FindAsync(id);
-        if (existingFavorite == null)
-        {
-            return NotFound("Favorite not found.");
-        }
-
-      
-        existingFavorite.UserId = favorite.UserId; 
-        existingFavorite.BlogId = favorite.BlogId; 
-
-        
-        _kajblogDbContext.Entry(existingFavorite).State = EntityState.Modified;
-
-        var result = await _kajblogDbContext.SaveChangesAsync();
-
-        
-        if (result == 0)
-        {
-            return NotFound("Favorite not found.");
-        }
 
         return NoContent();
     }
-
-    private bool FavoriteDisplays(int id)
-    {
-        return _kajblogDbContext.Favorites.Any(e => e.Id == id);
-    }
-
 }

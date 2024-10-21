@@ -4,6 +4,7 @@ using KajBlog_BackEnd.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KajBlog_BackEnd.Migrations
 {
     [DbContext(typeof(KajBlogDbContext))]
-    partial class KajBlogDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241021175659_favorites")]
+    partial class favorites
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -66,41 +69,6 @@ namespace KajBlog_BackEnd.Migrations
                     b.HasKey("BlogId");
 
                     b.ToTable("Blogs");
-
-                    b.HasData(
-                        new
-                        {
-                            BlogId = 1,
-                            BlogBody = "C# 10 introduces a number of exciting features, such as global usings and file-scoped namespaces.",
-                            Category = "Tech",
-                            CreatedBy = "user1",
-                            CreatedOn = new DateTime(2024, 10, 21, 21, 24, 19, 963, DateTimeKind.Utc).AddTicks(7928),
-                            GiphyPull = "https://giphy.com/some-url",
-                            SubjectLine = "Exploring C# 10 Features",
-                            UserId = "user1"
-                        },
-                        new
-                        {
-                            BlogId = 2,
-                            BlogBody = "If you’re looking for the next best travel spots, check out these incredible destinations for 2024.",
-                            Category = "Travel",
-                            CreatedBy = "user2",
-                            CreatedOn = new DateTime(2024, 10, 21, 21, 24, 19, 963, DateTimeKind.Utc).AddTicks(7930),
-                            GiphyPull = "https://giphy.com/some-url-2",
-                            SubjectLine = "Top 10 Destinations for 2024",
-                            UserId = "user2"
-                        },
-                        new
-                        {
-                            BlogId = 3,
-                            BlogBody = "Mindfulness can help you stay in the present moment and reduce stress. Here's how to get started.",
-                            Category = "Health",
-                            CreatedBy = "user3",
-                            CreatedOn = new DateTime(2024, 10, 21, 21, 24, 19, 963, DateTimeKind.Utc).AddTicks(7931),
-                            GiphyPull = "https://giphy.com/some-url-3",
-                            SubjectLine = "Mindfulness Techniques for Beginners",
-                            UserId = "user3"
-                        });
                 });
 
             modelBuilder.Entity("KajBlog_BackEnd.Models.Favorite", b =>
@@ -127,9 +95,8 @@ namespace KajBlog_BackEnd.Migrations
                     b.Property<DateTime?>("UpdatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
