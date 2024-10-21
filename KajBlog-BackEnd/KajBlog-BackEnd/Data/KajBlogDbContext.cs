@@ -11,4 +11,18 @@ public class KajBlogDbContext : DbContext
     public virtual DbSet<Blog> Blogs { get; set; }
     public virtual DbSet<Favorite> Favorites { get; set; }
 
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Favorite>()
+            .HasKey(f => f.Id);  
+
+        modelBuilder.Entity<Favorite>()
+            .HasOne(f => f.Blog)
+            .WithMany(b => b.Favorites)
+            .HasForeignKey(f => f.BlogId)
+            .OnDelete(DeleteBehavior.Cascade);  
+
+        base.OnModelCreating(modelBuilder);
+    }
+
 }
