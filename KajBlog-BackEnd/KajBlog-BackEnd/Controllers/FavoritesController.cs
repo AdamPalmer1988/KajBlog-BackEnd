@@ -20,101 +20,77 @@ public class FavoritesController : ApiBaseController
     {
         _kajblogDbContext = kajblogDbContext;
     }
-
-    [HttpGet("{userId}")] 
-    public async Task<IActionResult> GetFavoritesByUserId(int userId)
+    [HttpGet("{userId}")]
+    public async Task<ActionResult<IEnumerable<Favorite>>> GetFavorites(int userId)
     {
-        IQueryable<Favorite> userFavorites = _kajblogDbContext.Favorites.Where(x => x.UserId == userId);
-
-        var result = new List<object>();
-
-        foreach (var favorite in await userFavorites.ToListAsync())
-        {
-            var blogDto = await _kajblogDbContext.Blogs.FindAsync(favorite.BlogId);
-
-            if (blogDto != null)
-            {
-                result.Add(new
-                {
-                    BlogId = favorite.BlogId,
-                    Category = blogDto.Category,
-                    SubjectLine = blogDto.SubjectLine,
-                    BlogBody = blogDto.BlogBody,
-                    GiphyPull = blogDto.GiphyPull
-                });
-            }
-        }
-
-        return Ok(result);
-    }
-    [HttpGet]
-    public ActionResult<IEnumerable<FavoriteDto>> GetFavorites()
-    {
-        var favorites = _kajblogDbContext.Favorites
-            .Select(f => new FavoriteDto
-            {
-                Id = f.Id,
-                UserId = f.UserId,
-                BlogId = f.BlogId
-            }).ToList();
-
+        var favorites = await _kajblogDbContext.Favorites
+            .Where(f => f.UserId == userId)
+            .ToListAsync();
         return Ok(favorites);
     }
+
     [HttpPost]
-    public async Task<IActionResult> CreateFavorite([FromBody] FavoriteDto favoriteDto)
+    public async Task<ActionResult<Favorite>> AddFavorite(Favorite favorite)
     {
-        if (favoriteDto == null)
-        {
-            return BadRequest("Favorite data is null.");
-        }
-
-        var favorite = new Favorite
-        {
-            UserId = favoriteDto.UserId,
-            BlogId = favoriteDto.BlogId
-        };
-
-        await _kajblogDbContext.Favorites.AddAsync(favorite);
+        _kajblogDbContext.Favorites.Add(favorite);
         await _kajblogDbContext.SaveChangesAsync();
-
-        return CreatedAtRoute("GetFavoriteById", new { id = favorite.Id }, favorite);
-    }
-    [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateFavorite(int id, [FromBody] FavoriteDto favoriteDto)
-    {
-        if (favoriteDto == null)
-        {
-            return BadRequest("Favorite data is null.");
-        }
-
-        var existingFavorite = await _kajblogDbContext.Favorites.FindAsync(id);
-        if (existingFavorite == null)
-        {
-            return NotFound(); 
-        }
-
-        existingFavorite.UserId = favoriteDto.UserId;
-        existingFavorite.BlogId = favoriteDto.BlogId;
-
-        await _kajblogDbContext.SaveChangesAsync();
-
-        return Ok(existingFavorite);
+        return CreatedAtAction(nameof(GetFavorites), new { userId = favorite.UserId }, favorite);
     }
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteFavorite(int id)
+    public async Task<IActionResult> RemoveFavorite(int id)
+    {
+        var favorite = await _kajblogDbContext.Favorites.FindAsync(id);
+        if (favorite == null)
+        {
+            return NotFound();
+        }
+
+        _kajblogDbContext.Favorites.Remove(favorite);
+        await _kajblogDbContext.SaveChangesAsync();
+        return NoContent();
+    }
+    private bool FavoriteExists(int id)
+    {
+        return _kajblogDbContext.Favorites.Any(e => e.Id == id);
+    }
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateFavorite(int id, Favorite favorite)
     {
         
+        if (id != favorite.Id)
+        {
+            return BadRequest("Favorite ID mismatch.");
+        }
+
+       
         var existingFavorite = await _kajblogDbContext.Favorites.FindAsync(id);
         if (existingFavorite == null)
         {
-            return NotFound(); 
+            return NotFound("Favorite not found.");
         }
 
+      
+        existingFavorite.UserId = favorite.UserId; 
+        existingFavorite.BlogId = favorite.BlogId; 
+
         
-        _kajblogDbContext.Favorites.Remove(existingFavorite);
-        await _kajblogDbContext.SaveChangesAsync(); 
+        _kajblogDbContext.Entry(existingFavorite).State = EntityState.Modified;
+
+        var result = await _kajblogDbContext.SaveChangesAsync();
+
+        
+        if (result == 0)
+        {
+            return NotFound("Favorite not found.");
+        }
 
         return NoContent();
+    }
+
+    private bool FavoriteDisplays(int id)
+    {
+        return _kajblogDbContext.Favorites.Any(e => e.Id == id);
     }
 
 }
