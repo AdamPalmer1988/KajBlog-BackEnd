@@ -24,6 +24,6 @@ public class ApiBaseController : ControllerBase
             }
         }
 
-        return null;
+        return "ABC123";
     }
 }

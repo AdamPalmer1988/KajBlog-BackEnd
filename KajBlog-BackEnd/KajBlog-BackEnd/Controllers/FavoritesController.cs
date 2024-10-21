@@ -10,7 +10,7 @@ namespace KajBlog_BackEnd.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-[Authorize]
+//[Authorize]
 public class FavoritesController : ApiBaseController
 {
     private readonly KajBlogDbContext _kajblogDbContext;
@@ -81,7 +81,7 @@ public class FavoritesController : ApiBaseController
         _kajblogDbContext.Favorites.Add(favorite);
         await _kajblogDbContext.SaveChangesAsync();
 
-        return CreatedAtAction(nameof(GetFavorites), new { userId = userId }, favorite);
+        return Ok();
     }
 
     [HttpDelete("{id}")]
