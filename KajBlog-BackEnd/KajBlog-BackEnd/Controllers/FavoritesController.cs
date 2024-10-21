@@ -10,7 +10,7 @@ namespace KajBlog_BackEnd.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-//[Authorize]
+[Authorize]
 public class FavoritesController : ApiBaseController
 {
     private readonly KajBlogDbContext _kajblogDbContext;
