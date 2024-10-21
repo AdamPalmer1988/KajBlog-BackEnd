@@ -47,8 +47,8 @@ public class FavoritesController : ApiBaseController
         return Ok(favorites);
     }
 
-    [HttpPost]
-    public async Task<ActionResult<Favorite>> AddFavorite(Favorite favorite)
+    [HttpPost("blog/{blogId}")]
+    public async Task<ActionResult<Favorite>> AddFavorite(int blogId)
     {
         var userId = GetCurrentUserID();
         if (string.IsNullOrEmpty(userId))
@@ -56,9 +56,27 @@ public class FavoritesController : ApiBaseController
             return Unauthorized();
         }
 
-        favorite.UserId = userId;
-        favorite.CreatedOn = DateTime.UtcNow;
-        favorite.CreatedBy = userId;
+        var blog = await _kajblogDbContext.Blogs.FindAsync(blogId);
+        if (blog == null)
+        {
+            return NotFound($"Blog with ID {blogId} does not exist.");
+        }
+
+        var existingFavorite = await _kajblogDbContext.Favorites
+            .FirstOrDefaultAsync(f => f.UserId == userId && f.BlogId == blogId);
+
+        if (existingFavorite != null)
+        {
+            return Conflict("This blog is already favorited.");
+        }
+
+        var favorite = new Favorite
+        {
+            BlogId = blogId,
+            UserId = userId,
+            CreatedOn = DateTime.UtcNow,
+            CreatedBy = userId
+        };
 
         _kajblogDbContext.Favorites.Add(favorite);
         await _kajblogDbContext.SaveChangesAsync();
