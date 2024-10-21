@@ -12,5 +12,7 @@ namespace KajBlog_BackEnd.Models
         public string SubjectLine { get; set; }
         public string BlogBody { get; set; }
         public string GiphyPull { get; set; }
+
+        public List<Favorite> Favorites { get; set; }
     }
 }

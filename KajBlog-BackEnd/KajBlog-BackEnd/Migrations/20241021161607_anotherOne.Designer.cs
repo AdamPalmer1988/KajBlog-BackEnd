@@ -4,6 +4,7 @@ using KajBlog_BackEnd.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace KajBlog_BackEnd.Migrations
 {
     [DbContext(typeof(KajBlogDbContext))]
-    partial class KajBlogDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241021161607_anotherOne")]
+    partial class anotherOne
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -98,25 +101,7 @@ namespace KajBlog_BackEnd.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BlogId");
-
                     b.ToTable("Favorites");
-                });
-
-            modelBuilder.Entity("KajBlog_BackEnd.Models.Favorite", b =>
-                {
-                    b.HasOne("KajBlog_BackEnd.Models.Blog", "Blog")
-                        .WithMany("Favorites")
-                        .HasForeignKey("BlogId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Blog");
-                });
-
-            modelBuilder.Entity("KajBlog_BackEnd.Models.Blog", b =>
-                {
-                    b.Navigation("Favorites");
                 });
 #pragma warning restore 612, 618
         }
