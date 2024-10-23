@@ -93,8 +93,8 @@ public class FavoritesController : ApiBaseController
             return Unauthorized();
         }
 
-        var favorite = await _kajblogDbContext.Favorites.FindAsync(id);
-        if (favorite == null || favorite.UserId != userId)
+        var favorite = await _kajblogDbContext.Favorites.FirstOrDefaultAsync(x => x.BlogId == id && x.UserId == userId);
+        if (favorite == null)
         {
             return NotFound();
         }
